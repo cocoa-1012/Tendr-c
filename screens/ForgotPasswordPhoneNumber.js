@@ -104,9 +104,9 @@ const ForgotPasswordPhoneNumber = ({ navigation }) => {
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <View
               style={{
-                height: 400,
-                width: SIZES.width * 0.8,
-                backgroundColor: COLORS.primary,
+                height: SIZES.height * 0.9,
+                width: SIZES.width * 0.95,
+                backgroundColor: COLORS.dark3,
                 borderRadius: 12
               }}>
               <FlatList
