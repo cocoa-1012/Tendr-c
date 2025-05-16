@@ -10,7 +10,7 @@ const Welcome = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.area}>
       <View style={styles.container}>
-        <Image source={images.logo} resizeMode="contain" style={styles.logo} />
+        <Image source={images.logo} resizeMode="cover" style={styles.logo} />
         <Text style={styles.title}>Welcome Tendr!</Text>
         <View style={{ marginVertical: 32 }}>
           <Button title="Continue with Phone"  onPress={() => navigation.navigate("ForgotPasswordPhoneNumber")} />
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     height: 72,
     marginBottom: 22,
     marginTop: -22,
-    tintColor: COLORS.primary
+    backgroundColor: COLORS.primary
   },
   title: {
     fontSize: 28,

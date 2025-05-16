@@ -38,7 +38,7 @@ const AppNavigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName={isFirstLaunch ? 'Welcome' : 'ForgotPasswordPhoneNumber'}>
+        initialRouteName={isFirstLaunch ? 'Welcome' : 'Welcome'}>
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="ForgotPasswordPhoneNumber" component={ForgotPasswordPhoneNumber} />
         <Stack.Screen name="OTPVerification" component={OTPVerification} />
