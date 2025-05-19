@@ -3,22 +3,24 @@ import React from 'react';
 import { SIZES, COLORS, icons } from '../constants';
 import { useNavigation } from '@react-navigation/native';
 
-const Header = ({ title }) => {
+const Header = ({ title, showBackButton = true }) => {
     const navigation = useNavigation();
 
     return (
         <View style={[styles.container, {
             backgroundColor: COLORS.white
         }]}>
-            <TouchableOpacity
-                onPress={() => navigation.goBack()}>
-                <Image
-                    source={icons.back}
-                    resizeMode='contain'
-                    style={[styles.backIcon, {
-                        tintColor: COLORS.greyscale900
-                    }]} />
-            </TouchableOpacity>
+            {showBackButton && (
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}>
+                    <Image
+                        source={icons.back}
+                        resizeMode='contain'
+                        style={[styles.backIcon, {
+                            tintColor: COLORS.greyscale900
+                        }]} />
+                </TouchableOpacity>
+            )}
             <Text style={[styles.title, {
                 color: COLORS.greyscale900
             }]}>{title}</Text>
