@@ -110,7 +110,7 @@ const ForgotPasswordPhoneNumber = ({ navigation }) => {
                 backgroundColor: COLORS.dark3,
                 borderRadius: 12
               }}>
-                 <Text style={styles.normalText}> Choose your country </Text> 
+              <Text style={styles.normalText}> Choose your country </Text> 
               <FlatList
                 data={areas}
                 renderItem={renderItem}
