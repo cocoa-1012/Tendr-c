@@ -104,11 +104,13 @@ const ForgotPasswordPhoneNumber = ({ navigation }) => {
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <View
               style={{
-                height: SIZES.height * 0.9,
-                width: SIZES.width * 0.95,
+                paddingTop: 30,
+                height: SIZES.height,
+                width: SIZES.width,
                 backgroundColor: COLORS.dark3,
                 borderRadius: 12
               }}>
+                 <Text style={styles.normalText}> Choose your country </Text> 
               <FlatList
                 data={areas}
                 renderItem={renderItem}
@@ -133,12 +135,10 @@ const ForgotPasswordPhoneNumber = ({ navigation }) => {
         firebaseConfig={firebaseConfig}
       />
       <View style={styles.container}>
-        <Header title="Sign Up" />
         <ScrollView style={{ marginVertical: 54 }} showsVerticalScrollIndicator={false}>
-          
           <Text style={[styles.title, {
             color: COLORS.black
-          }]}>Enter to Your Phone Number</Text>
+          }]}>Verify your phone to ensure you can always access your account! </Text>          
           <View style={[styles.inputContainer, { backgroundColor: COLORS.greyscale500 }]}>
             <TouchableOpacity
               style={styles.selectFlagContainer}
@@ -215,11 +215,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 26,
+    fontSize: 20,
     fontFamily: "semiBold",
     color: COLORS.black,
     textAlign: "center",
     marginBottom: 22
+  },
+  normalText: {
+    paddingTop: 32,
+    fontSize:24,
+    fontFamily: "regular",
+    fontWeight: "900",
+    color: COLORS.white,
+    textAlign: "center",
   },
   checkBoxContainer: {
     flexDirection: "row",

@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
-import { FillYourProfile, ForgotPasswordPhoneNumber, OTPVerification, Welcome } from '../screens';
+import { FillYourProfile, SignupPhoneNumber, OTPVerification, Welcome, Signup } from '../screens';
 
 
 const Stack = createNativeStackNavigator();
@@ -38,9 +38,10 @@ const AppNavigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName={isFirstLaunch ? 'Welcome' : 'Welcome'}>
+        initialRouteName={isFirstLaunch ? 'Signup' : 'Signup'}>
         <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="ForgotPasswordPhoneNumber" component={ForgotPasswordPhoneNumber} />
+        <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="SignupPhoneNumber" component={SignupPhoneNumber} />
         <Stack.Screen name="OTPVerification" component={OTPVerification} />
         <Stack.Screen name="FillYourProfile" component={FillYourProfile} />
         </Stack.Navigator>

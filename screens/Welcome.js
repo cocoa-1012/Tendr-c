@@ -13,7 +13,7 @@ const Welcome = ({ navigation }) => {
         <Image source={images.logo} resizeMode="cover" style={styles.logo} />
         <Text style={styles.title}>Welcome Tendr!</Text>
         <View style={{ marginVertical: 32 }}>
-          <Button title="Continue with Phone"  onPress={() => navigation.navigate("ForgotPasswordPhoneNumber")} />
+          <Button title="Continue with Phone"  onPress={() => navigation.navigate("SignupPhoneNumber")} />
 
         </View>
       </View>

@@ -1,11 +1,13 @@
 import Welcome from "./Welcome";
-import ForgotPasswordPhoneNumber from "./ForgotPasswordPhoneNumber";
+import SignupPhoneNumber from "./SignupPhoneNumber";
 import OTPVerification from "./OTPVerification";
 import FillYourProfile from "./FillYourProfile";
+import Signup from "./Signup";
 
 export {
     Welcome,
-    ForgotPasswordPhoneNumber,
+    SignupPhoneNumber,
     OTPVerification,
     FillYourProfile,
+    Signup,
 }
