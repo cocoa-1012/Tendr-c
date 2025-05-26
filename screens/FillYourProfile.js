@@ -11,21 +11,28 @@ import Input from '../components/Input';
 import { getFormatedDate } from "react-native-modern-datepicker";
 import DatePickerModal from '../components/DatePickerModal';
 import Button from '../components/Button';
+import DatePicker from 'react-native-modern-datepicker'
 
 const isTestMode = true;
 
 const initialState = {
   inputValues: {
-    fullName: isTestMode ? 'John Doe' : '',
-    email: isTestMode ? 'example@gmail.com' : '',
+    firstName: isTestMode ? 'John Doe' : '',
+    lastName: isTestMode ? 'Doe' : '',
+    inviteCode: isTestMode ? 'example@gmail.com' : '',
     nickname: isTestMode ? "" : "",
-    phoneNumber: ''
+    gender: '',
+    birthday: '',
+    avatar: null,
   },
   inputValidities: {
-    fullName: false,
-    email: false,
+    firstName: false,
+    lastName: false,
+    inviteCode: false,
     nickname: false,
-    phoneNumber: false,
+    gender: false,
+    birthday: false,
+    avatar: false,
   },
   formIsValid: false,
 }
@@ -35,22 +42,13 @@ const FillYourProfile = ({ navigation }) => {
   const [image, setImage] = useState(null);
   const [error, setError] = useState();
   const [formState, dispatchFormState] = useReducer(reducer, initialState);
-  const [areas, setAreas] = useState([]);
-  const [selectedArea, setSelectedArea] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
+  const [genderModalVisible, setGenderModalVisible] = useState(false);
+  const [birthdayModalVisible, setBirthdayModalVisible] = useState(false);
+  const genderOptions = [
+    { id: 1, label: "Male", value: 'male' },
+    { id: 2, label: 'Female', value: 'female' },
+    { id: 3, label: 'Other', value: 'other' },];
 
-  const today = new Date();
-  const startDate = getFormatedDate(
-    new Date(today.setDate(today.getDate() + 1)),
-    "YYYY/MM/DD"
-  );
-
-  const [startedDate, setStartedDate] = useState("12/12/2023");
-
-  const handleOnPressStartDate = () => {
-    setOpenStartDatePicker(!openStartDatePicker);
-  };
 
   const inputChangedHandler = useCallback(
     (inputId, inputValue) => {
@@ -68,114 +66,18 @@ const FillYourProfile = ({ navigation }) => {
 
   const pickImage = async () => {
     try {
-      const tempUri = await launchImagePicker()
-
-      if (!tempUri) return
-
+      const tempUri = await launchImagePicker();
+      if (!tempUri) return;
       // set the image
-      setImage({ uri: tempUri })
+      setImage({ uri: tempUri });
+      inputChangedHandler('avatar', { uri: tempUri });
     } catch (error) { }
   };
-
-  // fetch codes from rescountries api
-  useEffect(() => {
-    fetch("https://restcountries.com/v2/all")
-      .then(response => response.json())
-      .then(data => {
-        let areaData = data.map((item) => {
-          return {
-            code: item.alpha2Code,
-            item: item.name,
-            callingCode: `+${item.callingCodes[0]}`,
-            flag: `https://flagsapi.com/${item.alpha2Code}/flat/64.png`
-          }
-        });
-
-        setAreas(areaData);
-        if (areaData.length > 0) {
-          let defaultData = areaData.filter((a) => a.code == "US");
-
-          if (defaultData.length > 0) {
-            setSelectedArea(defaultData[0])
-          }
-        }
-      })
-  }, [])
-
-  // render countries codes modal
-  function RenderAreasCodesModal() {
-
-    const renderItem = ({ item }) => {
-      return (
-        <TouchableOpacity
-          style={{
-            padding: 10,
-            flexDirection: "row"
-          }}
-          onPress={() => {
-            setSelectedArea(item),
-              setModalVisible(false)
-          }}
-        >
-          <Image
-            source={{ uri: item.flag }}
-            contentFit='contain'
-            style={{
-              height: 30,
-              width: 30,
-              marginRight: 10
-            }}
-          />
-          <Text style={{ fontSize: 16, color: "#fff" }}>{item.item}</Text>
-        </TouchableOpacity>
-      )
-    }
-    return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-      >
-        <TouchableWithoutFeedback
-          onPress={() => setModalVisible(false)}
-        >
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <View
-              style={{
-                height: SIZES.height,
-                width: SIZES.width,
-                backgroundColor: COLORS.primary,
-                borderRadius: 12
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={styles.closeBtn}>
-                <Ionicons name="close-outline" size={24} color={COLORS.primary} />
-              </TouchableOpacity>
-              <FlatList
-                data={areas}
-                renderItem={renderItem}
-                horizontal={false}
-                keyExtractor={(item) => item.code}
-                style={{
-                  padding: 20,
-                  marginBottom: 20
-                }}
-              />
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    )
-  }
 
   return (
     <SafeAreaView style={styles.area}>
       <View style={styles.container}>
-        <Header title="Fill Your Profile" />
+        <Header title="Fill Your Profile" showBackButton={false} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ alignItems: "center", marginVertical: 12 }}>
             <View style={styles.avatarContainer}>
@@ -195,92 +97,144 @@ const FillYourProfile = ({ navigation }) => {
           </View>
           <View>
             <Input
-              id="fullName"
+              id="firstName"
               onInputChanged={inputChangedHandler}
-              errorText={formState.inputValidities['fullName']}
-              placeholder="Full Name"
+              errorText={formState.inputValidities['firstName']}
+              placeholder="First Name"
+              placeholderTextColor={COLORS.gray} />
+            <Input
+              id="lastName"
+              onInputChanged={inputChangedHandler}
+              errorText={formState.inputValidities['lastName']}
+              placeholder="Last Name"
               placeholderTextColor={COLORS.gray} />
             <Input
               id="nickname"
               onInputChanged={inputChangedHandler}
               errorText={formState.inputValidities['nickname']}
-              placeholder="Nickname"
+              placeholder="Custom Username"
               placeholderTextColor={COLORS.gray} />
             <Input
-              id="email"
+              id="inviteCode"
               onInputChanged={inputChangedHandler}
-              errorText={formState.inputValidities['email']}
-              placeholder="Email"
+              errorText={formState.inputValidities['inviteCode']}
+              placeholder="Invite Code (optional)"
               placeholderTextColor={COLORS.gray}
               keyboardType="email-address" />
-            <View style={{
-              width: SIZES.width - 32
-            }}>
-              <TouchableOpacity
-                style={[styles.inputBtn, {
-                  backgroundColor: COLORS.greyscale500,
-                  borderColor: COLORS.greyscale500,
-                }]}
-                onPress={handleOnPressStartDate}
-              >
-                <Text style={{ ...FONTS.body4, color: COLORS.grayscale400 }}>{startedDate}</Text>
-                <Feather name="calendar" size={24} color={COLORS.grayscale400} />
-              </TouchableOpacity>
-            </View>
-            <View style={[styles.inputContainer, {
-              backgroundColor: COLORS.greyscale500,
-              borderColor: COLORS.greyscale500,
-            }]}>
-              <TouchableOpacity
-                style={styles.selectFlagContainer}
-                onPress={() => setModalVisible(true)}>
-                <View style={{ justifyContent: "center" }}>
-                  <Image
-                    source={icons.down}
-                    resizeMode='contain'
-                    style={styles.downIcon}
-                  />
-                </View>
-                <View style={{ justifyContent: "center", marginLeft: 5 }}>
-                  <Image
-                    source={{ uri: selectedArea?.flag }}
-                    contentFit="contain"
-                    style={styles.flagIcon}
-                  />
-                </View>
-                <View style={{ justifyContent: "center", marginLeft: 5 }}>
-                  <Text style={{ color: "#111", fontSize: 12 }}>{selectedArea?.callingCode}</Text>
-                </View>
-              </TouchableOpacity>
-              {/* Phone Number Text Input */}
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your phone number"
-                placeholderTextColor={COLORS.gray}
-                selectionColor="#111"
-                keyboardType="numeric"
-              />
-            </View>
+            <Text style={styles.normalText}>Gender</Text>
+            <TouchableOpacity
+              style={styles.inputBtn}
+              onPress={() => setGenderModalVisible(true)}
+            >
+              <Text style={{ color: formState.inputValues.gender ? COLORS.black : COLORS.gray }}>
+                {formState.inputValues.gender
+                  ? genderOptions.find(opt => opt.value === formState.inputValues.gender)?.label
+                  : 'Select Gender'}
+              </Text>
+              <Feather name="chevron-down" size={20} color={COLORS.gray} />
+            </TouchableOpacity>
+            <Text style={styles.normalText}>Birthday</Text>
+            <TouchableOpacity
+              style={styles.inputBtn}
+              onPress={() => setBirthdayModalVisible(true)}
+            >
+              <Text style={{ color: formState.inputValues.birthday ? COLORS.black : COLORS.gray }}>
+                {formState.inputValues.birthday
+                  ? formState.inputValues.birthday
+                  : 'Select Birthday'}
+              </Text>
+              <Feather name="chevron-down" size={20} color={COLORS.gray} />
+            </TouchableOpacity>
           </View>
+
         </ScrollView>
       </View>
-      <DatePickerModal
-        open={openStartDatePicker}
-        startDate={startDate}
-        selectedDate={startedDate}
-        onClose={() => setOpenStartDatePicker(false)}
-        onChangeStartDate={(date) => setStartedDate(date)}
-      />
-      {RenderAreasCodesModal()}
       <View style={styles.bottomContainer}>
-       
         <Button
           title="Continue"
           filled
           style={styles.continueButton}
-          onPress={() => navigation.navigate("Welcome")}
+          onPress={() => navigation.navigate("DrinkPreferences", { profile: formState.inputValues })}
         />
       </View>
+      <Modal
+        visible={genderModalVisible}
+        transparent
+        animationType="slide"
+      >
+        <TouchableWithoutFeedback onPress={() => setGenderModalVisible(false)}>
+          <View style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.2)',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <View style={{
+              backgroundColor: COLORS.white,
+              borderRadius: 16,
+              padding: 24,
+              width: '80%',
+              alignItems: 'center'
+            }}>
+              {genderOptions.map(option => (
+                <TouchableOpacity
+                  key={option.value}
+                  style={{ paddingVertical: 12, width: '100%' }}
+                  onPress={() => {
+                    inputChangedHandler('gender', option.value);
+                    setGenderModalVisible(false);
+                  }}
+                >
+                  <Text style={{
+                    fontSize: 16,
+                    color: COLORS.black,
+                    textAlign: 'center'
+                  }}>{option.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+      <Modal
+        visible={birthdayModalVisible}
+        transparent
+        animationType="slide"
+      >
+        <TouchableWithoutFeedback onPress={() => setBirthdayModalVisible(false)}>
+          <View style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.2)',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <View style={{
+              backgroundColor: COLORS.white,
+              borderRadius: 16,
+              padding: 24,
+              width: '80%',
+              alignItems: 'center'
+            }}>
+              <DatePicker
+                mode="calendar"
+                onSelectedChange={date => {
+                  inputChangedHandler('birthday', date);
+                  setBirthdayModalVisible(false);
+                }}
+                options={{
+                  backgroundColor: COLORS.white,
+                  textHeaderColor: COLORS.primary,
+                  textDefaultColor: COLORS.black,
+                  selectedTextColor: COLORS.white,
+                  mainColor: COLORS.primary,
+                  textSecondaryColor: COLORS.gray,
+                  borderColor: "rgba(122, 146, 165, 0.1)",
+                }}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </SafeAreaView>
   )
 };
@@ -294,6 +248,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: COLORS.white
+  },
+  normalText: {
+    paddingTop: 20,
+    fontSize: 16,
+    fontFamily: "regular",
+    fontWeight: "900",
+    color: COLORS.black,
+    textAlign: "left",
   },
   avatarContainer: {
     marginVertical: 12,
@@ -380,7 +342,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   continueButton: {
-    width: (SIZES.width - 32)  - 8,
+    width: (SIZES.width - 32) - 8,
     borderRadius: 32,
     backgroundColor: COLORS.primary,
     borderColor: COLORS.primary

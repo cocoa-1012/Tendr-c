@@ -60,6 +60,7 @@ const ForgotPasswordPhoneNumber = ({ navigation }) => {
         fullPhoneNumber,
         recaptchaVerifier.current
       );
+      console.log("FullPhoneNumber: ", fullPhoneNumber);
       navigation.navigate("OTPVerification", { confirmationResult });
     } catch (error) {
       Alert.alert('Error', error.message);

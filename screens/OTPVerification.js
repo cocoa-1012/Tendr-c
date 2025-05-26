@@ -12,6 +12,7 @@ const OTPVerification = ({ navigation, route }) => {
   console.log("OTPVerification", confirmationResult);
   const [time, setTime] = useState(119);
   const [otp, setOtp] = useState('');
+  const [passTime, setPassTime] = useState(false);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -27,16 +28,18 @@ const OTPVerification = ({ navigation, route }) => {
     try {
       const credential = await confirmationResult.confirm(otp);
       // OTP verified successfully, navigate to next screen
+      setPassTime(true);
       navigation.navigate("FillYourProfile");
-    } catch (error) {
+    } catch (error) {Z
       setOtp('');
       Alert.alert('Verification Failed', 'Please enter the correct code sent to your phone.');
     }
   };
 
   useEffect(() => {
-    if (time === 0) {
-      Alert.alert('Time Out', 'Please request a new code.');
+    if (time === 0 && !passTime) {
+      setPassTime(true);
+      Alert.alert('Time Out', 'Please request a new code.', time, otp);
     }
   }, [time, otp]);
 

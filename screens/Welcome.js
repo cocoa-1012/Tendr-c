@@ -14,7 +14,7 @@ const Welcome = ({ navigation }) => {
         <Text style={styles.title}>Welcome Tendr!</Text>
         <View style={{ marginVertical: 32 }}>
           <Button title="Continue with Phone"  onPress={() => navigation.navigate("SignupPhoneNumber")} />
-
+          <Button title="Goto profile"  onPress={() => navigation.navigate("FillYourProfile")} />
         </View>
       </View>
       <View style={styles.bottomContainer}>

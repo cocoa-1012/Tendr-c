@@ -2,7 +2,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
-import { FillYourProfile, SignupPhoneNumber, OTPVerification, Welcome, Signup } from '../screens';
+import { FillYourProfile, SignupPhoneNumber, OTPVerification, Welcome, Signup, DrinkPreferences, FoodPreferences } from '../screens';
+import Profile from '../screens/Profile';
+import BottomTabNavigation from './BottomTabNavigation';
+import PurchaseItemsScreen from '../screens/PurchaseItems';
 
 
 const Stack = createNativeStackNavigator();
@@ -44,6 +47,11 @@ const AppNavigation = () => {
         <Stack.Screen name="SignupPhoneNumber" component={SignupPhoneNumber} />
         <Stack.Screen name="OTPVerification" component={OTPVerification} />
         <Stack.Screen name="FillYourProfile" component={FillYourProfile} />
+        <Stack.Screen name="DrinkPreferences" component={DrinkPreferences} />
+        <Stack.Screen name="FoodPreferences" component={FoodPreferences} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Main" component={BottomTabNavigation} />
+        <Stack.Screen name="PurchaseItems" component={PurchaseItemsScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )
